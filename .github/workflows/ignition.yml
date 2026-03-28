@@ -25,7 +25,7 @@ jobs:
           butane --input config.bu --output config.ign
 
       - name: Upload Ignition artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ignition-file
           path: config.ign
