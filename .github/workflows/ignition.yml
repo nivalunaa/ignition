@@ -1,0 +1,39 @@
+name: Build Ignition
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Butane
+        run: |
+          curl -L -o /usr/local/bin/butane https://github.com/coreos/butane/releases/latest/download/butane-$(uname -s)-$(uname -m)
+          chmod +x /usr/local/bin/butane
+
+      - name: Convert Butane to Ignition
+        run: |
+          butane --input config.bu --output config.ign
+
+      - name: Upload Ignition artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ignition-file
+          path: config.ign
+
+      - name: Commit Ignition file
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add config.ign
+          git commit -m "Update Ignition file"
+          git push origin main
