@@ -17,7 +17,7 @@ jobs:
 
       - name: Install Butane
         run: |
-          curl -L -o /usr/local/bin/butane https://github.com/coreos/butane/releases/latest/download/butane-$(uname -s)-$(uname -m)
+          curl -L -o /usr/local/bin/butane https://github.com/coreos/butane/releases/download/v0.27.0/butane-x86_64-unknown-linux-gnu
           chmod +x /usr/local/bin/butane
 
       - name: Convert Butane to Ignition
