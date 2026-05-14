@@ -66,8 +66,8 @@ storage:
 
           [[updates.periodic.window]]
           days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-          window_start = "01:00"
-          window_length_minutes = 240
+          start_time = "01:00"
+          length_minutes = 240
     - path: /etc/systemd/zram-generator.conf
       mode: 0644
       contents:
