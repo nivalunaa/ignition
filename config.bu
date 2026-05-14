@@ -73,24 +73,14 @@ storage:
       contents:
         inline: |
           [zram0]
-#systemd:
-#  units:
-#    - name: daily-shutdown.timer
-#      enabled: true
-#      contents: |
-#        [Unit]
-#        Description=Daily shutdown at 21:00 UTC (23:00 or 00:00 in Finnish time)
-#
-#        [Timer]
-#        OnCalendar=*-*-* 21:00:00 UTC
-#
-#        [Install]
-#        WantedBy=timers.target
-#    - name: daily-shutdown.service
-#      contents: |
-#        [Unit]
-#        Description=Daily shutdown at 21:00 UTC (23:00 or 00:00 in Finnish time)
-#
-#        [Service]
-#        Type=oneshot
-#        ExecStart=/usr/bin/systemctl poweroff
+systemd:
+  units:
+    - name: podman-auto-update.timer
+      enabled: true
+      dropins:
+        - name: override.conf
+          contents: |
+            [Timer]
+            OnCalendar=*-*-* 01:00:00
+            RandomizedDelaySec=900
+            Persistent=true
