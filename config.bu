@@ -65,6 +65,7 @@ storage:
           time_zone = "Europe/Helsinki"
 
           [[updates.periodic.window]]
+          days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
           window_start = "01:00"
           window_length_minutes = 240
 
