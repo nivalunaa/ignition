@@ -1,5 +1,10 @@
 variant: fcos
 version: 1.7.0
+kernel_arguments:
+  should_not_exist:
+    - mitigations=auto,nosmt
+  should_exist:
+    - mitigations=auto
 passwd:
   users:
     - name: core
@@ -39,43 +44,16 @@ storage:
         name: sleeper
       group:
         name: sleeper
+    - path: /home/sleeper/.config/containers/systemd
+      mode: 0755
+      user:
+        name: sleeper
+      group:
+        name: sleeper
   files:
-    # sleeper
+    # system
     - path: /var/lib/systemd/linger/sleeper
       mode: 0644
-    - path: /home/sleeper/.config/systemd/user/update-manifests.service
-      mode: 0755
-      user:
-        name: sleeper
-      group:
-        name: sleeper
-      contents:
-        inline: |
-          [Unit]
-          Description=Update manifests
-
-          [Service]
-          Type=oneshot
-          ExecStart=/usr/bin/bash -c 'if [ -d "$HOME/.config/containers/systemd/.git" ]; then cd "$HOME/.config/containers/systemd" && git pull --ff-only; else git clone https://github.com/nivalunaa/containers.git "$HOME/.config/containers/systemd"; fi && systemctl --user daemon-reload'
-    - path: /home/sleeper/.config/systemd/user/update-manifests.timer
-      mode: 0755
-      user:
-        name: sleeper
-      group:
-        name: sleeper
-      contents:
-        inline: |
-          [Unit]
-          Description=Update manifests every 5 minutes
-
-          [Timer]
-          OnBootSec=2min
-          OnUnitActiveSec=5min
-          Persistent=true
-
-          [Install]
-          WantedBy=timers.target
-    # system
     - path: /etc/zincati/config.d/90-periodic-updates.toml
       mode: 0644
       contents:
@@ -90,15 +68,6 @@ storage:
           window_start = "01:00"
           window_length_minutes = 240
 
-  links:
-    # sleeper
-    - path: /home/sleeper/.config/systemd/user/default.target.wants/update-manifests.timer
-      user:
-        name: sleeper
-      group:
-        name: sleeper
-      target: /home/sleeper/.config/systemd/user/update-manifests.timer
-      hard: false
 #systemd:
 #  units:
 #    - name: daily-shutdown.timer
